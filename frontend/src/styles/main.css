@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+@import "./leaflet-custom.css";
+
+@source "../index.html";
+@source "../**/*.{js,jsx,ts,tsx}";
+
+@layer base {
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    @apply antialiased text-gray-800 bg-gray-50;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-6 py-3 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 active:scale-[0.98] transition-all duration-150 cursor-pointer;
+  }
+
+  .card {
+    @apply bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:scale-[1.01] transition-all duration-150;
+  }
+}
