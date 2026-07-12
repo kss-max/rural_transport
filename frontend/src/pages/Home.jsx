@@ -80,7 +80,7 @@ function Home() {
           <p className="text-emerald-100 text-base md:text-lg max-w-lg mb-6">
             Find and book reliable vehicles for your journey — autos, cars, pickups and tractors available.
           </p>
-          {user?.role === 'PROVIDER' && (
+          {(user?.role === 'PROVIDER' || user?.role === 'DRIVER' || user?.role === 'ADMIN') && (
             <button
               onClick={() => navigate('/add-vehicle')}
               className="bg-white text-emerald-700 px-6 py-3 rounded-xl font-semibold text-sm hover:bg-emerald-50 active:scale-[0.98] transition-all duration-200 shadow-sm"

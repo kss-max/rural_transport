@@ -18,8 +18,7 @@ const vehicleSchema = new mongoose.Schema({
     required: true
   },
   description: {
-    type: String,
-    required: true
+    type: String
   },
   pricePerKm: {
     type: Number,

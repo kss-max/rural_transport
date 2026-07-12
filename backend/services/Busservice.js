@@ -245,7 +245,7 @@ const getDriverTrips = async (driverId, limit = 10) => {
     throw new Error(`Failed to fetch driver trips: ${error.message}`);
   }
 };
-
+ 
 // Get all active trips (for passengers to see available buses)
 const getAllActiveTrips = async () => {
   try {

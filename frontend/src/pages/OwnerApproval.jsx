@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { fetchBookings, updateBookingStatus } from '../services/bookingService'
 import { useAuth } from '../context/AuthContext'
 import useOffline from '../hooks/useOffline'
+import { subscribeToPush, isSubscribedToPush } from '../services/pushNotification'
 
 function ProviderDashboard() {
   const [bookings, setBookings] = useState([])
@@ -13,6 +14,19 @@ function ProviderDashboard() {
   const [updatingId, setUpdatingId] = useState(null)
   const navigate = useNavigate()
   const { user, loading: authLoading } = useAuth()
+  const [isSubscribed, setIsSubscribed] = useState(false)
+  const [subscribing, setSubscribing] = useState(false)
+
+  useEffect(() => {
+    isSubscribedToPush().then(setIsSubscribed)
+  }, [])
+
+  const handleSubscribe = async () => {
+    setSubscribing(true)
+    const success = await subscribeToPush()
+    setIsSubscribed(success)
+    setSubscribing(false)
+  }
 
   const loadBookings = useCallback(async () => {
     setLoading(true)
@@ -33,7 +47,7 @@ function ProviderDashboard() {
       navigate('/login', { replace: true })
       return
     }
-    if (!['PROVIDER'].includes(user.role)) {
+    if (!['PROVIDER', 'DRIVER', 'ADMIN'].includes(user.role)) {
       navigate('/', { replace: true })
       return
     }
@@ -71,12 +85,23 @@ function ProviderDashboard() {
           <h1 className="text-2xl font-bold text-gray-900">Provider Dashboard</h1>
           <p className="text-sm text-gray-500 mt-0.5">Manage your vehicles and bookings</p>
         </div>
-        <button
-          onClick={() => navigate('/add-vehicle')}
-          className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:from-emerald-700 hover:to-teal-700 active:scale-[0.98] transition-all duration-200 shadow-sm hover:shadow-md"
-        >
-          + Add Vehicle
-        </button>
+        <div className="flex gap-3">
+          {!isSubscribed && (
+            <button
+              onClick={handleSubscribe}
+              disabled={subscribing}
+              className="bg-blue-50 text-blue-600 border border-blue-200 px-4 py-2.5 rounded-xl font-semibold text-sm hover:bg-blue-100 transition-all duration-200 shadow-sm"
+            >
+              {subscribing ? 'Enabling...' : '🔔 Enable Notifications'}
+            </button>
+          )}
+          <button
+            onClick={() => navigate('/add-vehicle')}
+            className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:from-emerald-700 hover:to-teal-700 active:scale-[0.98] transition-all duration-200 shadow-sm hover:shadow-md"
+          >
+            + Add Vehicle
+          </button>
+        </div>
       </div>
 
       {!isOnline && (

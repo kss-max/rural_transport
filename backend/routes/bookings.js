@@ -12,9 +12,9 @@ const router = express.Router()
 router.get('/', requireAuth, listBookings)
 
 // POST /bookings — supports instant, scheduled, rental
-router.post('/', requireAuth, requireRole('USER', 'DRIVER', 'ADMIN'), createBookingHandler)
+router.post('/', requireAuth, requireRole('USER', 'PROVIDER', 'DRIVER', 'ADMIN'), createBookingHandler)
 
 // PATCH /bookings/:id — update status (approve / reject)
-router.patch('/:id', requireAuth, requireRole('PROVIDER', 'ADMIN'), updateBookingStatusHandler)
+router.patch('/:id', requireAuth, requireRole('PROVIDER', 'DRIVER', 'ADMIN'), updateBookingStatusHandler)
 
 module.exports = router

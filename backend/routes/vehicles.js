@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
 })
 
 
-router.post('/', requireAuth, requireRole('PROVIDER', 'ADMIN'), async (req, res) => {
+router.post('/', requireAuth, requireRole('PROVIDER', 'DRIVER', 'ADMIN'), async (req, res) => {
   try {
     const { ownerName, phone, village, category, description, pricePerKm } = req.body
     if (!ownerName || !phone || !village || !category || !pricePerKm) {

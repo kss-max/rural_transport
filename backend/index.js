@@ -12,6 +12,7 @@ const authRoutes = require('./auth/userlogin')
 const vehicleRoutes = require('./routes/vehicles')
 const bookingRoutes = require('./routes/bookings')
 const busRoutes = require('./routes/bus')
+const notificationRoutes = require('./routes/notifications')
 
 
 const app = express()
@@ -44,6 +45,7 @@ app.use('/auth', authRoutes)
 app.use('/vehicles', vehicleRoutes)
 app.use('/bookings', bookingRoutes)
 app.use('/bus', busRoutes)
+app.use('/notifications', notificationRoutes)
 
 
 

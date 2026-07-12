@@ -38,7 +38,7 @@ export default function BookingForm({
       navigate('/login', { replace: true })
       return
     }
-    if (!['USER', 'ADMIN'].includes(user.role)) {
+    if (!['USER', 'ADMIN', 'PROVIDER', 'DRIVER'].includes(user.role)) {
       navigate('/', { replace: true })
     }
   }, [authLoading, user, navigate])

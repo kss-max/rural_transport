@@ -20,6 +20,8 @@ import BusRouteSelection from '../pages/bus/BusRouteSelection'
 import { syncQueuedBookings } from '../services/syncService'
 import { locationQueue } from '../services/tileCache'
 import { updateTripLocation } from '../services/busService'
+import { useAuth } from '../context/AuthContext'
+import { subscribeToPush, isSubscribedToPush } from '../services/pushNotification'
 
 function SyncToast({ message, onClose }) {
   useEffect(() => {
@@ -39,6 +41,9 @@ function SyncToast({ message, onClose }) {
 
 function App() {
   const [syncToast, setSyncToast] = useState(null)
+  const { user } = useAuth()
+
+  // Auto-subscribe removed. We now use a manual button on the provider dashboard.
 
   // Sync queued data when app comes back online
   const handleOnline = useCallback(async () => {

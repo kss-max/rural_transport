@@ -18,7 +18,7 @@ async function listBookings(req, res) {
       return res.json({ bookings })
     }
 
-    if (role === 'PROVIDER') {
+    if (role === 'PROVIDER' || role === 'DRIVER') {
       const providerVehicles = await getVehiclesByProvider(req.user.id)
       const vehicleIds = providerVehicles.map((v) => v.id)
       const bookings = await getBookingsForVehicles(vehicleIds)
@@ -98,6 +98,16 @@ async function createBookingHandler(req, res) {
     }
 
     const booking = await createBooking(bookingData)
+
+    // ---- PUSH NOTIFICATION TO PROVIDER ----
+    // After booking is saved, notify the vehicle owner
+    // We don't await this — the passenger shouldn't wait for notification delivery
+    const { notifyProviderAboutBooking } = require('../services/notificationService')
+    const providerId = vehicle.providerId?.id || vehicle.providerId
+    notifyProviderAboutBooking(providerId, booking).catch(err => {
+      console.error('[Booking] Push notification failed (non-blocking):', err.message)
+    })
+
     return res.status(201).json({ booking })
   } catch (err) {
     console.error('Create booking error', err)
@@ -122,7 +132,7 @@ async function updateBookingStatusHandler(req, res) {
       return res.status(404).json({ message: 'Booking not found.' })
     }
 
-    if (req.user.role === 'PROVIDER') {
+    if (req.user.role === 'PROVIDER' || req.user.role === 'DRIVER') {
       const vehicle = await getVehicleById(booking.vehicleId)
       if (!vehicle || String(vehicle.providerId?.id || vehicle.providerId) !== String(req.user.id)) {
         return res.status(403).json({ message: 'You cannot modify this booking.' })

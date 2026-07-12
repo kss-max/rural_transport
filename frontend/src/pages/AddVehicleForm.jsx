@@ -26,7 +26,7 @@ function AddVehicleForm() {
       navigate('/login', { replace: true })
       return
     }
-    if (user.role !== 'PROVIDER' && user.role !== 'ADMIN') {
+    if (user.role !== 'PROVIDER' && user.role !== 'DRIVER' && user.role !== 'ADMIN') {
       navigate('/', { replace: true })
     }
   }, [user, navigate])
